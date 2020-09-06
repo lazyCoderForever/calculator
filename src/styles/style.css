@@ -1,0 +1,87 @@
+@import "fonts.css";
+
+
+:root {
+    --main-text-color: #F2F2F2;
+    --main-text-size: 36px;
+    --blue: linear-gradient(155.23deg, #28518E 0%, #3A77D1 100%);
+}
+
+
+body {
+  font-family: "Geometria", "sans-serif";
+}
+
+.wrap{
+    display: flex;
+    max-width: 554px;
+    height: 800px;
+    justify-content: center;
+    margin: 50px auto;
+}
+
+.calculator {
+    display: flex;
+    flex-direction: column;
+    width: 100%;
+    padding: 50px;
+    color: var(--main-text-color);
+    background: var(--blue);
+    box-shadow: 0px 82px 158px rgba(0, 0, 0, 0.35), 0px 24.7206px 47.6324px rgba(0, 0, 0, 0.228056), 0px 10.2677px 19.7841px rgba(0, 0, 0, 0.175), 0px 3.71362px 7.1555px rgba(0, 0, 0, 0.121944);
+    border-radius: 18px;
+    font-family: 'Geometria';
+    font-weight: normal;
+}
+
+.calculator .field_input-value{
+    height: 46px;
+    margin: 37px 0 37px 0;
+    padding-bottom: 20px;
+    border: none;
+    color: var(--main-text-size);
+    background-color: transparent;
+    box-shadow: 0px 2px 0px 0px rgba(255,255,255,0.35);
+    font-family: "Geometria_B";
+    font-size: 56px;
+    text-align: end;
+}
+.calculator .field_input-value:focus{
+    outline:none ;
+}
+
+.calculator .result_example{
+    display: flex;
+    justify-content: flex-end;
+    align-items: flex-end;
+    max-width: 70vw;
+    height: 117px;
+    font-size: 24px;
+}
+
+.calculator .interface_calculator{
+    display: grid;
+    grid-template-columns: repeat(4, minmax(100px, 1fr));
+    grid-template-rows: repeat(4, minmax(100px, 1fr));
+    justify-items: center;
+}
+
+.button {
+    width: 80px;
+    height: 80px;
+    font-size: var(--main-text-size);
+    text-align: center;
+    cursor: pointer;
+    line-height: 80px;
+    transition: 0.2s;
+}
+.button:hover{
+    background-color: rgba(255,255,255,0.35);
+    border-radius: 40px;
+}
+
+.button[data-value="="] {
+    color: #2B589A;
+    background: var(--main-text-color);
+    border-radius: 40px;
+}
+
