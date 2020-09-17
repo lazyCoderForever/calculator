@@ -12,7 +12,7 @@ const operators: Operation = {
   '/': '/',
   '-': '-',
   '+': '+',
-  '√': '√'
+  '√': '√',
 }
 
 const operatorsAndPriority: OperationPriority = {

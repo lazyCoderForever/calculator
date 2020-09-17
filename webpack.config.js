@@ -8,12 +8,15 @@ module.exports = {
   module: {
     rules: [{ 
     test: /\.tss?$/,
-    loaders: ['babel-loader','tslint-loader'],
+    exclude: /node_modules/,
+    loaders: ['babel-loader'],
+    //loaders: ['babel-loader','eslint-loader'],
     exclude: [path.resolve(__dirname, 'node_modules')]
   },
   {
     test: /\.js?$/,
-    loaders: ['babel-loader'],
+    exclude: /node_modules/,
+    loaders: ['eslint-loader'],
     exclude: [path.resolve(__dirname, 'node_modules')]
   },
   {

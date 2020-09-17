@@ -1,33 +1,41 @@
-import {operators} from './calcOperators'
+import { operators } from './static/calcOperators'
+import codes from './static/forbiddenKeyboardCode'
+import Calculator from './Calculator'
 
-export default class Handlers {
+const calculator = new Calculator()
+
+  export default class Handlers {
   userExample: string
   userInputValue: string
   resultField: HTMLElement
   inputField: HTMLInputElement
 
   constructor() {
-    this.userExample = '',
-    this.userInputValue = '',
-    this.resultField = document.querySelector(
-      '.result_example'
-    ) as HTMLElement,
-    this.inputField = document.querySelector(
-      '.field_input-value '
-    ) as HTMLInputElement
-  }
-
-  getUserExample(): string{
-    return this.userExample 
+    ;(this.userExample = ''),
+      (this.userInputValue = ''),
+      (this.resultField = document.querySelector(
+        '.result_example'
+      ) as HTMLElement),
+      (this.inputField = document.querySelector(
+        '.field_input-value '
+      ) as HTMLInputElement)
   }
 
   updateExampleFieldAndData(targetData: string): number | undefined {
     if (targetData !== '') {
-      this.userExample += `${this.userInputValue} ${operators[targetData]} `
-      this.resultField.innerText = `${this.userExample}`
-      this.userInputValue = ''
-      this.inputField.value = ''
-      return 0
+      if (targetData === '=') {
+        this.userExample += `${this.userInputValue}`
+        this.resultField.innerText = `${this.userExample}`
+        this.userInputValue = ''
+        this.inputField.value = ''
+        return 0
+      } else {
+        this.userExample += `${this.userInputValue} ${operators[targetData]} `
+        this.resultField.innerText = `${this.userExample}`
+        this.userInputValue = ''
+        this.inputField.value = ''
+        return 0
+      }
     }
     this.userExample = ''
     this.userInputValue = ''
@@ -35,13 +43,23 @@ export default class Handlers {
     this.inputField.value = ''
   }
 
+  displayCalculatedValue(example: string) {
+      calculator.conversionFromInfix(example)
+      this.userExample = ''
+      this.userInputValue = '' + calculator.calculateResultValue()
+      this.userInputValue =  this.userInputValue.replace('.',',')
+      this.updateInputField()
+      return 0
+  }
+
   updateInputField(): void {
     this.inputField.value = `${this.userInputValue}`
   }
 
-  getInputExample(el: InputEvent): number | undefined {
+  //From keyboard
+  getInputSymbol(el: InputEvent): number | undefined {
     const targetData: string | null = el.data
-
+    // null - "backspace" on keyboard
     if (targetData === null) {
       this.userInputValue = this.userInputValue.slice(
         0,
@@ -49,17 +67,19 @@ export default class Handlers {
       )
       return 0
     }
-    if (!/(\d|\W|)/.test(targetData)) {
-      this.inputField.value = this.userInputValue
+    if (/\d|\(|\)/.test(targetData)) {
+      this.userInputValue += targetData
     } else if (operators.hasOwnProperty(targetData)) {
       this.updateExampleFieldAndData(targetData)
-    } else {
+    } else if (targetData === '.' || targetData === ',') {
       this.userInputValue += targetData === '.' ? ',' : targetData
+      this.updateInputField()
+    } else {
       this.updateInputField()
     }
   }
-
-  getInputButton(e: MouseEvent): number | undefined {
+  //From interface 
+  getPressedButton(e: MouseEvent): number | undefined {
     const eventTarget = e.target as HTMLElement
     const targetValueAttribute = eventTarget.getAttribute(
       'data-value'
@@ -79,15 +99,9 @@ export default class Handlers {
       case 'C':
         this.updateExampleFieldAndData('')
         break
-      case '√':
-        this.updateExampleFieldAndData('√')
-        break
-      case '%':
-        this.updateExampleFieldAndData('%')
-        break
-
       case '=':
-        //this.updateExampleFieldAndData('=')
+        this.updateExampleFieldAndData('=')
+        this.displayCalculatedValue(this.userExample)
         break
       default:
         this.updateExampleFieldAndData(targetValueAttribute)
@@ -100,23 +114,28 @@ export default class Handlers {
       '.button'
     )
     buttonsInterface.forEach((btn: HTMLElement) => {
-      btn.addEventListener('click', (e: any) => this.getInputButton(e))
+      btn.addEventListener('click', (e: any) => this.getPressedButton(e))
     })
   }
 
   addInputListener(): void {
     this.inputField.addEventListener('input', (e: any) =>
-      this.getInputExample(e)
+      this.getInputSymbol(e)
     )
     this.inputField.addEventListener('keydown', (e: any) => {
-      if (
-        e.code === 'ArrowUp' ||
-        e.code === 'ArrowDown' ||
-        e.code === 'ArrowLeft' ||
-        e.code === 'ArrowRight'
-      ) {
+      if (e.code === 'Enter' || e.code === 'NumpadEnter') {
+        this.updateExampleFieldAndData('=')
+        this.displayCalculatedValue(this.userExample)
+        return 0
+      }
+      if(e.code === 'Delete'){
+        this.updateExampleFieldAndData('')
+        return 0
+      }
+      if (e.code in codes) {
         e.preventDefault()
       }
     })
   }
 }
+
