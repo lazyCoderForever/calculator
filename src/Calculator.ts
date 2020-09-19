@@ -6,7 +6,7 @@ export default class Calculator {
    calculatedResult: number
 
    constructor() {
-      (this.operationsStack = []),
+      ;(this.operationsStack = []),
          (this.outputStr = []),
          (this.calculatedResult = 0)
    }
@@ -36,7 +36,7 @@ export default class Calculator {
             vault.pop()
             return resultOperation
          case '√':
-            resultOperation = +(Math.sqrt(vault[vault.length - 1])).toFixed(3)
+            resultOperation = +Math.sqrt(vault[vault.length - 1]).toFixed(3)
             vault.pop()
             return resultOperation
          case '+':
@@ -76,6 +76,39 @@ export default class Calculator {
       return this.calculatedResult
    }
 
+   closingBracketOperator(): void {
+      let flagStopPoint: boolean = true
+      while (flagStopPoint) {
+         // while not find '(' or empty stack
+         const OperationStacklength: number = this.operationsStack.length
+         if (this.operationsStack[OperationStacklength - 1] === '(') {
+            flagStopPoint = false
+            this.operationsStack.pop()
+         } else {
+            if (OperationStacklength > 0) {
+               this.outputStr.push(this.operationsStack.pop() as string)
+            } else {
+               flagStopPoint = false
+            }
+         }
+      }
+   }
+
+   defaultMathOperators(mathOperator: string): void {
+      const operationsStackLastElement: number = this.operationsStack.length - 1
+      if (
+         operatorsAndPriority[
+            this.operationsStack[operationsStackLastElement]
+         ] >= operatorsAndPriority[mathOperator]
+      ) {
+         const operatorFromStack: string = this.operationsStack.pop() as string
+         this.operationsStack.push(mathOperator)
+         this.outputStr.push(operatorFromStack)
+      } else {
+         this.operationsStack.push(mathOperator)
+      }
+   }
+
    conversionFromInfix(inputExample: string): void {
       this.outputStr = []
       // =========== add whitespace and replace ','===========
@@ -92,7 +125,6 @@ export default class Calculator {
             }
          }
       )
-
       splitAndClearInputExample.forEach((element: string) => {
          const elNumber: number = +element
          // ========== element number or '(' ============
@@ -102,45 +134,22 @@ export default class Calculator {
                : this.outputStr.push(element)
             return 0
          }
-         // ========== /,*,+,-,% ============
-         if (operatorsAndPriority.hasOwnProperty(element)) {
-            const operationsStackLastElement: number =
-               this.operationsStack.length - 1
-            if (
-               operatorsAndPriority[
-                  this.operationsStack[operationsStackLastElement]
-               ] >= operatorsAndPriority[element]
-            ) {
-               const operatorFromStack: string = this.operationsStack.pop() as string
-               this.operationsStack.push(element)
-               this.outputStr.push(operatorFromStack)
-               return 0
-            } else {
-               this.operationsStack.push(element)
-               return 0
-            }
-         }
-         // ========= ) =========
          if (element === ')') {
-            let flagStopPoint: boolean = true
-            while (flagStopPoint ) {
-               // while not find '(' or empty stack
-               const OperationStacklength: number = this.operationsStack.length
-               if (this.operationsStack[OperationStacklength - 1] === '(') {
-                  flagStopPoint = false
-                  this.operationsStack.pop()
-               } else {
-                  if (OperationStacklength > 0){
-                     this.outputStr.push(this.operationsStack.pop() as string)
-                  } else {
-                     flagStopPoint = false
-                  }
-               }
-            }
+            this.closingBracketOperator()
             return 0
          }
+         // ========== /,*,+,-,% ============
+         if (operatorsAndPriority.hasOwnProperty(element)) {
+            this.defaultMathOperators(element)
+         }
       })
-
+      //clear from wrong '(', ')'
+      this.operationsStack = this.operationsStack.filter((el: string) => {
+         if (el !== '(' && el !== ')') {
+            return el
+         }
+      })
+      //push the remaining operation in outputStr
       for (const index = 0; index < this.operationsStack.length; ) {
          this.outputStr.push(this.operationsStack.pop() as string)
       }
