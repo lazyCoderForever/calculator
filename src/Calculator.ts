@@ -85,6 +85,7 @@ export default class Calculator {
             flagStopPoint = false
             this.operationsStack.pop()
          } else {
+            // for prevention infinite cycle
             if (OperationStacklength > 0) {
                this.outputStr.push(this.operationsStack.pop() as string)
             } else {
@@ -96,6 +97,7 @@ export default class Calculator {
 
    defaultMathOperators(mathOperator: string): void {
       const operationsStackLastElement: number = this.operationsStack.length - 1
+      //check operator priority in operationsStack
       if (
          operatorsAndPriority[
             this.operationsStack[operationsStackLastElement]
