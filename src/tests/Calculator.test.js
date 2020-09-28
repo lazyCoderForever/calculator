@@ -69,19 +69,38 @@ describe('Class Calculator', () => {
    })
 
    test('calculateResultValue Method', () => {
-    calculator.outputStr =  ['253', '32', '-', '53', '12', 'x', '2', '/', '+']
-    expect(calculator.calculateResultValue()).toBe(539)
+      calculator.outputStr = ['253', '32', '-', '53', '12', 'x', '2', '/', '+']
+      expect(calculator.calculateResultValue()).toBe(539)
 
-    calculator.outputStr =  ['546', '12', '2', 'x', '+', '5', '%', '+']
-    expect(calculator.calculateResultValue()).toBe(598.5)
+      calculator.outputStr = ['546', '12', '2', 'x', '+', '5', '%', '+']
+      expect(calculator.calculateResultValue()).toBe(598.5)
 
-    calculator.outputStr =  ['756.76', '23', '/', '2', 'x', '12', '/', '13', '-']
-    expect(calculator.calculateResultValue()).toBe(-7.516)
+      calculator.outputStr = [
+         '756.76',
+         '23',
+         '/',
+         '2',
+         'x',
+         '12',
+         '/',
+         '13',
+         '-',
+      ]
+      expect(calculator.calculateResultValue()).toBe(-7.516)
 
-    calculator.outputStr =  ['36', '√', '126', 'x', '256', '√', '+']
-    expect(calculator.calculateResultValue()).toBe(772)
+      calculator.outputStr = ['36', '√', '126', 'x', '256', '√', '+']
+      expect(calculator.calculateResultValue()).toBe(772)
 
-    calculator.outputStr =  ['256.347', '25.36', '/', '2', 'x', '774', '√', '+']
-    expect(calculator.calculateResultValue()).toBe(48.037)
-})
+      calculator.outputStr = [
+         '256.347',
+         '25.36',
+         '/',
+         '2',
+         'x',
+         '774',
+         '√',
+         '+',
+      ]
+      expect(calculator.calculateResultValue()).toBe(48.037)
+   })
 })
