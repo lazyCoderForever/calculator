@@ -71,10 +71,14 @@ body {
     width: 80px;
     height: 80px;
     font-size: var(--main-text-size);
+    font-family: "Geometria";
     text-align: center;
     cursor: pointer;
     line-height: 80px;
     transition: 0.2s;
+    color: var(--main-text-color);
+    border: none;
+    background-color: transparent;
 }
 .button:hover{
     background-color: rgba(255,255,255,0.35);

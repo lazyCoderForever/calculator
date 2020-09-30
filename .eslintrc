@@ -1,20 +1,29 @@
 {
-    "extends": ["plugin:prettier/recommended"],
-    "rules": {
-      "max-len": [
-        "error",
-        {
-          "code": 140
-        }
-      ],
-      "prettier/prettier": "error"
-    },
-    "parserOptions": {
-      "ecmaVersion": 2020,
-      "sourceType": "module"
-    },
-    "plugins": ["prettier"],
-    "env": {
-      "es6": true
-    }
+  "plugins": [
+    "@typescript-eslint",
+    "prettier"
+  ],
+  "extends": [
+    "plugin:prettier/recommended",
+    "plugin:@typescript-eslint/recommended",
+    "prettier",
+    "prettier/@typescript-eslint"
+  ],
+  "rules": {
+    "max-len": [
+      "error",
+      {
+        "code": 140
+      }
+    ],
+    "prettier/prettier": "error"
+  },
+  "parserOptions": {
+    "ecmaVersion": 2020,
+    "sourceType": "module"
+  },
+
+  "env": {
+    "es6": true
+  }
 }
