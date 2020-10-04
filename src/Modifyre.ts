@@ -63,8 +63,14 @@ export default class Modifyre {
             }
          }
       )
-      splitAndClearInputExample.forEach((element: string) => {
+      splitAndClearInputExample.forEach((element: string, index: number) => {
          const elNumber: number = +element
+         // ========== negative number ============
+         if( (index === 0 && element === '-') || (this.operationsStack[this.operationsStack.length - 1] === '(') && element === '-'){
+            this.operationsStack.push(element)
+            this.outputStr.push('0')
+            return 0
+         }
          // ========== element number or '(' ============
          if (!isNaN(elNumber) || element === '(') {
             element === '('

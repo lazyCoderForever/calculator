@@ -10,10 +10,12 @@ export default class Handlers {
    userInputValue: string
    resultField: HTMLElement
    inputField: HTMLInputElement
+   newOperator: boolean
 
    constructor() {
       ;(this.userExample = ''),
          (this.userInputValue = ''),
+         (this.newOperator = true),
          (this.resultField = document.querySelector(
             '.result_example'
          ) as HTMLElement),
@@ -22,26 +24,39 @@ export default class Handlers {
          ) as HTMLInputElement)
    }
 
+   clearData(size: boolean){
+      if(size){
+         this.userExample = ''
+         this.userInputValue = ''
+         this.resultField.innerText = ''
+         this.inputField.value = ''
+      } else{
+         this.userInputValue = ''
+         this.inputField.value = ''
+      }
+   }
+
    updateExampleFieldAndData(targetData: string): number | undefined {
       if (targetData !== '') {
          if (targetData === '=') {
             this.userExample += `${this.userInputValue}`
             this.resultField.innerText = `${this.userExample}`
-            this.userInputValue = ''
-            this.inputField.value = ''
+            this.clearData(false)
             return 0
-         } else {
+         } else if (this.newOperator === true){    
             this.userExample += `${this.userInputValue} ${operators[targetData]} `
             this.resultField.innerText = `${this.userExample}`
-            this.userInputValue = ''
-            this.inputField.value = ''
+            this.clearData(false)
+            this.newOperator = false
+            return 0
+         } else {
+            this.userExample = this.userExample.slice(0, -3) + ` ${operators[targetData]} `
+            this.resultField.innerText = `${this.userExample}`
+            this.clearData(false)
             return 0
          }
       }
-      this.userExample = ''
-      this.userInputValue = ''
-      this.resultField.innerText = ''
-      this.inputField.value = ''
+      this.clearData(true)
    }
 
    displayCalculatedValue(example: string): number {
@@ -71,6 +86,7 @@ export default class Handlers {
       }
       if (/\d|\(|\)/.test(targetData)) {
          this.userInputValue += targetData
+         this.newOperator = true
       } else if (operators.hasOwnProperty(targetData)) {
          this.updateExampleFieldAndData(targetData)
       } else if (targetData === '.' || targetData === ',') {
@@ -89,6 +105,7 @@ export default class Handlers {
 
       if (/\d/.test(targetValueAttribute)) {
          this.userInputValue += targetValueAttribute
+         this.newOperator = true
          this.updateInputField()
          return 0
       }
