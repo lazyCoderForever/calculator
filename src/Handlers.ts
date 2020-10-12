@@ -20,7 +20,7 @@ export default class Handlers {
             '.result_example'
          ) as HTMLElement),
          (this.inputField = document.querySelector(
-            '.field_input-value '
+            '.field_input-value'
          ) as HTMLInputElement)
    }
 
@@ -62,8 +62,7 @@ export default class Handlers {
    displayCalculatedValue(example: string): number {
       modifyre.conversionFromInfix(example)
       this.userExample = ''
-      this.userInputValue =
-         '' + calculator.calculateResultValue(modifyre.getPostfixExample())
+      this.userInputValue = '' + calculator.calculateResultValue(modifyre.getPostfixExample())
       this.userInputValue = this.userInputValue.replace('.', ',')
       this.updateInputField()
       return 0
